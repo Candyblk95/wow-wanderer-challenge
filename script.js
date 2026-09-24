@@ -1,0 +1,5 @@
+const key='wanderer-zone-v1';const boxes=[...document.querySelectorAll('#checks input')],count=document.querySelector('#count'),unlock=document.querySelector('#unlock'),zone=document.querySelector('#zoneInput'),title=document.querySelector('#zoneTitle');
+function save(){localStorage.setItem(key,JSON.stringify({zone:zone.value,checks:boxes.map(x=>x.checked)}))}
+function render(){let n=boxes.filter(x=>x.checked).length;count.textContent=n+'/'+boxes.length;let done=n===boxes.length;unlock.textContent=done?'✦ PASSAGE UNLOCKED — THE ROAD OPENS ✦':'🔒 THE ROAD AHEAD IS LOCKED';unlock.classList.toggle('open',done);title.textContent=zone.value.trim()||'My Current Zone';save()}
+try{let s=JSON.parse(localStorage.getItem(key)||'{}');zone.value=s.zone||'';(s.checks||[]).forEach((v,i)=>{if(boxes[i])boxes[i].checked=v})}catch(e){}
+boxes.forEach(x=>x.addEventListener('change',render));zone.addEventListener('input',render);document.querySelector('#reset').addEventListener('click',()=>{if(confirm('Reset this chapter?')){boxes.forEach(x=>x.checked=false);render()}});render();
